@@ -5,3 +5,5 @@ edition = "2024"
 
 [dependencies]
 actix-web = "4"
+dotenv = "0.15.0"
+sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls"] }
