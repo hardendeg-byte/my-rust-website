@@ -1,30 +1,42 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-
+use
 #[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("<h1> <td> Hello world!")
+async fn home_page() -> impl Responder {
+    HttpResponse::Ok().body(
+        r#"
+        <h1>Home Page (with JavaScript)</h1>
+        <p>Click the button to go to the destination page.</p>
+        <button onclick="window.location.href='/info'" style="
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+        ">Go to Destination</button>
+        "#
+    )
 }
 
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
+
+
 #[get("/info")]
 async fn get_info() -> impl Responder {
     HttpResponse::Ok().body("It is 2 am")
 }
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
-}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenv::dotenv().ok();
+
     println!("Web Server starting!");
     HttpServer::new(|| {
         App::new()
-            .service(hello)
-            .service(echo)
+            .service(home_page)
             .service(get_info)
-            .route("/hey", web::get().to(manual_hello))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
